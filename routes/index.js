@@ -10,6 +10,23 @@ router.get('/healthCheck',function(req,res){
 	res.json({"hello":"world"})
 })
 
+router.post('/addOffence', function(req, res){
+	var db = req.db;
+	var offence = req.body;
+	console.log(offence);
+    var collection = db.get('offenceDb');
+    var promise = collection.insert(offence);
+    promise.on('error',function(err){ 
+		res.status = 500;
+    	res.send(err.message);
+	});
+	promise.on('success',function(doc){ 
+		res.status = 201;
+    	res.send("Ok");
+    });
+    
+});
+
 router.get('/allVeh',function(req,res){
 	var db = req.db;
     var collection = db.get('vehicleDb');

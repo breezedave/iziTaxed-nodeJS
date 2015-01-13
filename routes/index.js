@@ -35,6 +35,14 @@ router.get('/allVeh',function(req,res){
     })
 })
 
+router.get('/allOffences',function(req,res){
+	var db = req.db;
+    var collection = db.get('vehicleDb');
+    collection.find({}, function (err, off) {
+    	res.json({"offences":off})
+    })
+})
+
 router.get('/veh/:vrm',function(req,res){
 	var db = req.db;
 	var vrmParam = req.params.vrm;

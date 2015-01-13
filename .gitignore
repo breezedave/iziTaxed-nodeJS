@@ -31,5 +31,5 @@ data
 *.lock
 
 
-config
+config/params.json
 secrets.js

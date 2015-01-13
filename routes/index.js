@@ -22,7 +22,7 @@ router.get('/veh/:vrm',function(req,res){
 	var db = req.db;
 	var vrmParam = req.params.vrm;
     var collection = db.get('vehicleDb');
-    collection.findOne({"VRM" : vrmParam}, function (err, veh) {
+    collection.findOne({"vrm" : vrmParam}, function (err, veh) {
     	var result = {};
     	if(veh == null) {
     		result.notFound = true

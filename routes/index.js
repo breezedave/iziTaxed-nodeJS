@@ -37,15 +37,18 @@ router.get('/allVeh',function(req,res){
 
 router.get('/allOffences',function(req,res){
 	var db = req.db;
-    var collection = db.get('vehicleDb');
-    collection.find({}, function (err, off) {
-    	res.json({"offences":off})
+    var collection = db.get('offenceDb');
+    collection.find({}, {fields : {"Photo":0}} , function (err, offs) {
+    	for(var i = 0; i < offs.length; i ++) {
+    		offs[i].DateTime = new Date(offs[i].DateTime);
+    	}
+    	res.json({"offences":offs})
     })
 })
 
 router.get('/veh/:vrm',function(req,res){
 	var db = req.db;
-	var vrmParam = req.params.vrm;
+	var vrmParam = req.params.vrm.toUpperCase();
     var collection = db.get('vehicleDb');
     collection.findOne({"vrm" : vrmParam}, function (err, veh) {
     	var result = {};

@@ -38,13 +38,23 @@ router.get('/allVeh',function(req,res){
 router.get('/allOffences',function(req,res){
 	var db = req.db;
     var collection = db.get('offenceDb');
-    collection.find({}, {fields : {"Photo":0}} , function (err, offs) {
+    collection.col.aggregate([{
+	$project: {
+        item: 1,
+        "DateTime": "$DateTime",
+        "VRM":"$VRM",
+        "MACAddress":"$MACAddress",
+        "BrowserInfo":"$BrowserInfo",
+        "GpsLocation":"$GpsLocation",
+        "Photos": { $size: "$Photo" }
+    }}], 
+    function (err, offs) {
     	for(var i = 0; i < offs.length; i ++) {
     		offs[i].DateTime = new Date(offs[i].DateTime);
     	}
-    	res.json({"offences":offs})
-    })
-})
+	res.json({"offences":offs})
+    });
+});
 
 router.get('/veh/:vrm',function(req,res){
 	var db = req.db;
@@ -90,7 +100,6 @@ router.get('/addVeh',function(req,res){
     	res.send(e);
     }
 });
-
 
 function licenceState(lic) {
 	var d = new Date();

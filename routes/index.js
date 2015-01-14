@@ -50,9 +50,28 @@ router.get('/allOffences',function(req,res){
     }}], 
     function (err, offs) {
     	for(var i = 0; i < offs.length; i ++) {
-    		offs[i].DateTime = new Date(offs[i].DateTime);
+    		offs[i].DateTimeString = new Date(offs[i].DateTime);
     	}
-	res.json({"offences":offs})
+	res.render("Offences",{"offences":offs})
+    });
+});
+
+router.get('/photo/:num/:VRM/:DateTime', function(req,res){
+	var db = req.db;
+	var VRM = req.params.VRM;
+	var num = parseInt(req.params.num)||0;
+	var DateTime = parseInt(String(req.params.DateTime).substring(0,String(req.params.DateTime).length-4));
+	console.log(DateTime);
+
+    var collection = db.get('offenceDb');
+    collection.findOne({"VRM":VRM, "DateTime":DateTime}, {Photo:{$slice: [1, 1]}},function(err,rec) {
+    	if(rec.Photo && rec.Photo.length-1 >= num) {
+	    	res.contentType("image/jpeg");
+	    	var img = new Buffer(rec.Photo[num], 'base64');
+	        res.end(img, "Base64");
+        } else {
+        	res.send("Not Found");
+        }
     });
 });
 

@@ -1,0 +1,29 @@
+extends layout
+
+block content
+	each offence, i in offences
+		table
+			tr
+				td VRM
+				td #{offence.VRM}
+			tr
+				td Date Time
+				td #{offence.DateTimeString}
+			tr
+				td Phone
+				td #{offence.BrowserInfo}
+			tr
+				td Mac Address
+				td #{offence.MACAddress}
+
+			- var n=0
+			while n < offence.Photos
+				tr
+					td(colspan=2)
+						a(href="/photo/#{n}/#{offence.VRM}/#{offence.DateTime}.jpg") Photo
+						- n++
+
+
+			
+			
+
